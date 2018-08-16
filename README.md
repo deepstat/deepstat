@@ -1,4 +1,4 @@
-# deepstat
+# DeepStat
 
 Welcome to my repository.
 
