@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>단일신경망 Single Layer Neural Network (ver. Flux in Julia)</title>
+<title>CNN Convolutional Neural Network (ver. Flux in Julia)</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13116,9 +13116,9 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#52280;&#44256;&#51088;&#47308;">&#52280;&#44256;&#51088;&#47308;<a class="anchor-link" href="#&#52280;&#44256;&#51088;&#47308;">&#182;</a></h1><p><a href="http://jorditorres.org/first-contact-with-tnesorflow/#cap4">http://jorditorres.org/first-contact-with-tnesorflow/#cap4</a> (First Contact with tensorflow)</p>
-<p><a href="https://deepstat.tistory.com/9">https://deepstat.tistory.com/9</a> (단일신경망 Single Layer Neural Network (ver. Tensorflow for Python)</p>
-<p><a href="https://deepstat.tistory.com/10">https://deepstat.tistory.com/10</a> (단일신경망 Single Layer Neural Network (ver. Tensorflow for R)</p>
+<h1 id="&#52280;&#44256;&#51088;&#47308;">&#52280;&#44256;&#51088;&#47308;<a class="anchor-link" href="#&#52280;&#44256;&#51088;&#47308;">&#182;</a></h1><p><a href="http://jorditorres.org/first-contact-with-tnesorflow/#cap5">http://jorditorres.org/first-contact-with-tnesorflow/#cap5</a> (First Contact with tensorflow)</p>
+<p><a href="https://deepstat.tistory.com/11">https://deepstat.tistory.com/11</a> (Convolutional Neural Network (ver. Python)</p>
+<p><a href="https://deepstat.tistory.com/12">https://deepstat.tistory.com/12</a> (Convolutional Neural Network (ver. R)</p>
 <p><a href="http://fluxml.ai/">http://fluxml.ai/</a> (flux: The Elegant Machine Learning Stack)</p>
 
 </div>
@@ -13127,7 +13127,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#45800;&#51068;&#49888;&#44221;&#47581;-Single-Layer-Neural-Network-(ver.-Flux-in-Julia)">&#45800;&#51068;&#49888;&#44221;&#47581; Single Layer Neural Network (ver. Flux in Julia)<a class="anchor-link" href="#&#45800;&#51068;&#49888;&#44221;&#47581;-Single-Layer-Neural-Network-(ver.-Flux-in-Julia)">&#182;</a></h1>
+<h1 id="CNN-Convolutional-Neural-Network-(ver.-Flux-in-Julia)">CNN Convolutional Neural Network (ver. Flux in Julia)<a class="anchor-link" href="#CNN-Convolutional-Neural-Network-(ver.-Flux-in-Julia)">&#182;</a></h1>
 </div>
 </div>
 </div>
@@ -13186,61 +13186,25 @@ Tuple{Array{UInt8,3},Array{UInt8,1}}
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="next_batch&#46972;&#45716;-&#54632;&#49688;-&#47564;&#46308;&#44592;."><code>next_batch</code>&#46972;&#45716; &#54632;&#49688; &#47564;&#46308;&#44592;.<a class="anchor-link" href="#next_batch&#46972;&#45716;-&#54632;&#49688;-&#47564;&#46308;&#44592;.">&#182;</a></h3>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-julia"><pre><span></span><span class="n">mnist_train</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">,</span><span class="o">:</span><span class="p">,</span><span class="o">:</span><span class="p">]</span>
+<div class=" highlight hl-julia"><pre><span></span><span class="n">mutable</span> <span class="n">struct</span> <span class="n">My_data</span>
+    <span class="n">data</span><span class="o">::</span><span class="kt">Tuple</span>
+    <span class="n">start_n</span><span class="o">::</span><span class="kt">Int</span>
+<span class="k">end</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[3]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>28×28 Array{UInt8,2}:
- 0x00  0x00  0x00  0x00  0x00  0x00  …  0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00  …  0xf7  0x7f  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0xc3  0x40  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x27  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00  …  0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
-    ⋮                             ⋮  ⋱                       ⋮            
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00  …  0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x37  0xac     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x88  0xfd     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00  …  0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00
- 0x00  0x00  0x00  0x00  0x00  0x00     0x00  0x00  0x00  0x00  0x00  0x00</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -13250,7 +13214,15 @@ Tuple{Array{UInt8,3},Array{UInt8,1}}
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-julia"><pre><span></span><span class="n">mnist_test</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+<div class=" highlight hl-julia"><pre><span></span><span class="k">function</span> <span class="n">next_batch</span><span class="p">(</span><span class="n">data</span><span class="o">::</span><span class="n">My_data</span><span class="p">,</span> <span class="n">n</span><span class="o">::</span><span class="kt">Int</span><span class="p">)</span>
+    <span class="n">start_n</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">start_n</span>
+    <span class="n">end_n</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">start_n</span> <span class="o">+</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">batch_X</span> <span class="o">=</span> <span class="n">float</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">start_n</span><span class="o">:</span><span class="n">end_n</span><span class="p">,</span><span class="o">:</span><span class="p">,</span><span class="o">:</span><span class="p">])</span>
+    <span class="n">reshape_batch_X</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">batch_X</span><span class="p">,</span> <span class="p">(</span><span class="o">:</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">batch_Y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">start_n</span><span class="o">:</span><span class="n">end_n</span><span class="p">]</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">start_n</span> <span class="o">=</span> <span class="p">(</span><span class="n">end_n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">permutedims</span><span class="p">(</span><span class="n">reshape_batch_X</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">Flux</span><span class="o">.</span><span class="n">onehotbatch</span><span class="p">(</span><span class="n">batch_Y</span><span class="p">,</span> <span class="mi">0</span><span class="o">:</span><span class="mi">9</span><span class="p">))</span>
+<span class="k">end</span>
 </pre></div>
 
     </div>
@@ -13269,69 +13241,6 @@ Tuple{Array{UInt8,3},Array{UInt8,1}}
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>0x00</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="next_batch&#46972;&#45716;-&#54632;&#49688;-&#47564;&#46308;&#44592;."><code>next_batch</code>&#46972;&#45716; &#54632;&#49688; &#47564;&#46308;&#44592;.<a class="anchor-link" href="#next_batch&#46972;&#45716;-&#54632;&#49688;-&#47564;&#46308;&#44592;.">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-julia"><pre><span></span><span class="n">mutable</span> <span class="n">struct</span> <span class="n">My_data</span>
-    <span class="n">data</span><span class="o">::</span><span class="kt">Tuple</span>
-    <span class="n">start_n</span><span class="o">::</span><span class="kt">Int</span>
-<span class="k">end</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-julia"><pre><span></span><span class="k">function</span> <span class="n">next_batch</span><span class="p">(</span><span class="n">data</span><span class="o">::</span><span class="n">My_data</span><span class="p">,</span> <span class="n">n</span><span class="o">::</span><span class="kt">Int</span><span class="p">)</span>
-    <span class="n">start_n</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">start_n</span>
-    <span class="n">end_n</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">start_n</span> <span class="o">+</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span>
-    <span class="n">batch_X</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">start_n</span><span class="o">:</span><span class="n">end_n</span><span class="p">,</span><span class="o">:</span><span class="p">,</span><span class="o">:</span><span class="p">]</span>
-    <span class="n">batch_Y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">start_n</span><span class="o">:</span><span class="n">end_n</span><span class="p">]</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">start_n</span> <span class="o">=</span> <span class="p">(</span><span class="n">end_n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">float</span><span class="p">(</span><span class="n">reshape</span><span class="p">(</span><span class="n">batch_X</span><span class="p">,</span><span class="o">:</span><span class="p">,</span><span class="mi">784</span><span class="p">)),</span> <span class="n">float</span><span class="p">(</span><span class="n">batch_Y</span><span class="p">)</span>
-<span class="k">end</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[6]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
 <pre>next_batch (generic function with 1 method)</pre>
 </div>
 
@@ -13343,7 +13252,7 @@ Tuple{Array{UInt8,3},Array{UInt8,1}}
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-julia"><pre><span></span><span class="n">train_dat</span> <span class="o">=</span> <span class="n">My_data</span><span class="p">(</span><span class="n">mnist_train</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
@@ -13358,7 +13267,55 @@ Tuple{Array{UInt8,3},Array{UInt8,1}}
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Single-layer-neural-network">Single layer neural network<a class="anchor-link" href="#Single-layer-neural-network">&#182;</a></h2>
+<h2 id="CNN-Convolutional-Neural-Network">CNN Convolutional Neural Network<a class="anchor-link" href="#CNN-Convolutional-Neural-Network">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-julia"><pre><span></span><span class="k">using</span> <span class="n">Flux</span><span class="p">,</span> <span class="n">Statistics</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="&#47784;&#54805;-&#49444;&#51221;">&#47784;&#54805; &#49444;&#51221;<a class="anchor-link" href="#&#47784;&#54805;-&#49444;&#51221;">&#182;</a></h4><p>input -&gt; conv1 -&gt; pool1 -&gt; conv2 -&gt; pool2 -&gt; [inner product -&gt; relu] -&gt; dropout -&gt; [inner product -&gt; softmax] -&gt; output</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-julia"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">Chain</span><span class="p">(</span>
+    <span class="n">Conv</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="mi">1</span><span class="o">=&gt;</span><span class="mi">32</span><span class="p">,</span> <span class="n">relu</span><span class="p">,</span> <span class="n">pad</span> <span class="o">=</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">maxpool</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)),</span>
+    <span class="n">Conv</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="mi">32</span><span class="o">=&gt;</span><span class="mi">64</span><span class="p">,</span> <span class="n">relu</span><span class="p">,</span> <span class="n">pad</span> <span class="o">=</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">maxpool</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)),</span>
+    <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">:</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
+    <span class="n">Dense</span><span class="p">(</span><span class="mi">7</span><span class="o">*</span><span class="mi">7</span><span class="o">*</span><span class="mi">64</span><span class="p">,</span><span class="mi">1024</span><span class="p">),</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span>
+    <span class="n">Dense</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">softmax</span><span class="p">);</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Loss-function-:-cross-entropy">Loss function : cross-entropy<a class="anchor-link" href="#Loss-function-:-cross-entropy">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -13367,28 +13324,20 @@ Tuple{Array{UInt8,3},Array{UInt8,1}}
 <div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-julia"><pre><span></span><span class="k">using</span> <span class="n">Flux</span>
+<div class=" highlight hl-julia"><pre><span></span><span class="n">loss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="n">Flux</span><span class="o">.</span><span class="n">crossentropy</span><span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">y</span><span class="p">);</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="&#48320;&#49688;-&#51648;&#51221;">&#48320;&#49688; &#51648;&#51221;<a class="anchor-link" href="#&#48320;&#49688;-&#51648;&#51221;">&#182;</a></h4>
-</div>
-</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-julia"><pre><span></span><span class="n">W</span> <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">784</span><span class="p">)</span><span class="o">./</span><span class="mi">20</span> <span class="o">.-</span> <span class="mi">1</span><span class="o">/</span><span class="mi">40</span><span class="p">)</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">./</span><span class="mi">20</span> <span class="o">.-</span> <span class="mi">1</span><span class="o">/</span><span class="mi">40</span><span class="p">);</span>
+<div class=" highlight hl-julia"><pre><span></span><span class="n">Accuracy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">Flux</span><span class="o">.</span><span class="n">onecold</span><span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">.==</span> <span class="n">Flux</span><span class="o">.</span><span class="n">onecold</span><span class="p">(</span><span class="n">y</span><span class="p">));</span>
 </pre></div>
 
     </div>
@@ -13399,7 +13348,7 @@ Tuple{Array{UInt8,3},Array{UInt8,1}}
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="&#47784;&#54805;-&#49444;&#51221;-Activation-function-:-softmax">&#47784;&#54805; &#49444;&#51221; Activation function : softmax<a class="anchor-link" href="#&#47784;&#54805;-&#49444;&#51221;-Activation-function-:-softmax">&#182;</a></h4>
+<h4 id="Optimizer-:-ADAM">Optimizer : ADAM<a class="anchor-link" href="#Optimizer-:-ADAM">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -13408,10 +13357,29 @@ Tuple{Array{UInt8,3},Array{UInt8,1}}
 <div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-julia"><pre><span></span><span class="k">function</span> <span class="n">model</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-    <span class="n">tX</span> <span class="o">=</span> <span class="n">transpose</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-    <span class="n">yhat</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">W</span> <span class="o">*</span> <span class="n">tX</span> <span class="o">.+</span> <span class="n">b</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">yhat</span>
+<div class=" highlight hl-julia"><pre><span></span><span class="n">PARS</span> <span class="o">=</span> <span class="n">params</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="k">function</span> <span class="n">my_opt</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">lr</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">:</span><span class="n">n</span>
+        <span class="n">train_loss_vec</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">test_acc</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="kp">in</span> <span class="mi">1</span><span class="o">:</span><span class="mi">30</span>
+            <span class="n">train_X</span><span class="p">,</span> <span class="n">train_Y</span> <span class="o">=</span> <span class="n">next_batch</span><span class="p">(</span><span class="n">train_dat</span><span class="p">,</span><span class="mi">2000</span><span class="p">)</span>
+            <span class="n">Flux</span><span class="o">.</span><span class="n">train!</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="p">[(</span><span class="n">train_X</span><span class="p">,</span> <span class="n">train_Y</span><span class="p">)],</span> <span class="n">ADAM</span><span class="p">(</span><span class="n">PARS</span><span class="p">,</span> <span class="n">lr</span><span class="p">))</span>
+            <span class="n">train_loss_vec</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss</span><span class="p">(</span><span class="n">train_X</span><span class="p">,</span><span class="n">train_Y</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">end</span>
+    
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="n">Flux</span><span class="o">.</span><span class="n">testmode!</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="kp">in</span> <span class="mi">1</span><span class="o">:</span><span class="mi">2</span>
+                <span class="n">test_X</span><span class="p">,</span> <span class="n">test_Y</span> <span class="o">=</span> <span class="n">next_batch</span><span class="p">(</span><span class="n">test_dat</span><span class="p">,</span><span class="mi">5000</span><span class="p">)</span>
+                <span class="n">test_acc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">Accuracy</span><span class="p">(</span><span class="n">test_X</span><span class="p">,</span> <span class="n">test_Y</span><span class="p">)</span>
+            <span class="k">end</span>
+            <span class="n">Flux</span><span class="o">.</span><span class="n">testmode!</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="kc">false</span><span class="p">)</span>
+        
+            <span class="n">println</span><span class="p">(</span><span class="s">&quot;step:&quot;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="s">&quot;  train_loss:&quot;</span> <span class="p">,</span><span class="n">mean</span><span class="p">(</span><span class="n">train_loss_vec</span><span class="p">),</span><span class="s">&quot;  test_acc:&quot;</span> <span class="p">,</span><span class="n">mean</span><span class="p">(</span><span class="n">test_acc</span><span class="p">))</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
 <span class="k">end</span>
 </pre></div>
 
@@ -13431,7 +13399,7 @@ Tuple{Array{UInt8,3},Array{UInt8,1}}
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>model (generic function with 1 method)</pre>
+<pre>my_opt (generic function with 1 method)</pre>
 </div>
 
 </div>
@@ -13439,79 +13407,13 @@ Tuple{Array{UInt8,3},Array{UInt8,1}}
 </div>
 </div>
 
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Loss-function-:-cross-entropy">Loss function : cross-entropy<a class="anchor-link" href="#Loss-function-:-cross-entropy">&#182;</a></h4>
-</div>
-</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-julia"><pre><span></span><span class="k">function</span> <span class="n">cross_entropy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
-    <span class="n">y_onehot</span> <span class="o">=</span> <span class="n">Flux</span><span class="o">.</span><span class="n">onehotbatch</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span><span class="n">sort</span><span class="p">(</span><span class="n">unique</span><span class="p">(</span><span class="n">Y</span><span class="p">)))</span>
-    <span class="n">yhat</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-    <span class="n">loss</span> <span class="o">=</span> <span class="n">sum</span><span class="p">(</span><span class="o">-</span><span class="n">y_onehot</span> <span class="o">.*</span> <span class="n">log</span><span class="o">.</span><span class="p">(</span><span class="n">yhat</span><span class="p">))</span><span class="o">./</span><span class="n">length</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">loss</span>
-<span class="k">end</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[11]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>cross_entropy (generic function with 1 method)</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Optimizer-:-ADAM-(learning_rate-=-0.0001)">Optimizer : ADAM (learning_rate = 0.0001)<a class="anchor-link" href="#Optimizer-:-ADAM-(learning_rate-=-0.0001)">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-julia"><pre><span></span><span class="n">PARS</span> <span class="o">=</span> <span class="n">params</span><span class="p">(</span><span class="n">W</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">:</span><span class="mi">1000</span>
-    <span class="n">train_X</span><span class="p">,</span> <span class="n">train_Y</span> <span class="o">=</span> <span class="n">next_batch</span><span class="p">(</span><span class="n">train_dat</span><span class="p">,</span><span class="mi">6000</span><span class="p">)</span>
-    <span class="n">Flux</span><span class="o">.</span><span class="n">train!</span><span class="p">(</span><span class="n">cross_entropy</span><span class="p">,</span> <span class="p">[(</span><span class="n">train_X</span><span class="p">,</span> <span class="n">train_Y</span><span class="p">)],</span> <span class="n">ADAM</span><span class="p">((</span><span class="n">PARS</span><span class="p">),</span> <span class="mf">0.0001</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span>
-        <span class="n">train_loss</span> <span class="o">=</span> <span class="n">cross_entropy</span><span class="p">(</span><span class="n">train_X</span><span class="p">,</span><span class="n">train_Y</span><span class="p">)</span>
-        
-        <span class="n">test_X</span><span class="p">,</span> <span class="n">test_Y</span> <span class="o">=</span> <span class="n">next_batch</span><span class="p">(</span><span class="n">test_dat</span><span class="p">,</span><span class="mi">10000</span><span class="p">)</span>
-        <span class="n">tmp_test</span> <span class="o">=</span> <span class="n">findmax</span><span class="p">(</span><span class="n">model</span><span class="p">(</span><span class="n">test_X</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">test_acc</span> <span class="o">=</span> <span class="n">sum</span><span class="p">([</span><span class="n">tmp_test</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="kp">in</span> <span class="mi">1</span><span class="o">:</span><span class="mi">10000</span><span class="p">]</span> <span class="o">.==</span> <span class="p">(</span><span class="n">test_Y</span> <span class="o">.+</span> <span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="mi">10000</span>
-        
-        <span class="n">println</span><span class="p">(</span><span class="s">&quot;step:&quot;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="s">&quot;  train_loss:&quot;</span> <span class="p">,</span><span class="n">train_loss</span><span class="p">,</span><span class="s">&quot;  test_acc:&quot;</span> <span class="p">,</span><span class="n">test_acc</span><span class="p">)</span>
-    <span class="k">end</span>
-<span class="k">end</span>
+<div class=" highlight hl-julia"><pre><span></span><span class="n">my_opt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.001</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13528,17 +13430,7 @@ Tuple{Array{UInt8,3},Array{UInt8,1}}
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>step:0  train_loss:45.543004320972074 (tracked)  test_acc:0.0763
-step:100  train_loss:2.3352842586852973 (tracked)  test_acc:0.8282
-step:200  train_loss:1.4340617268439977 (tracked)  test_acc:0.8699
-step:300  train_loss:1.1800125983237264 (tracked)  test_acc:0.8748
-step:400  train_loss:1.0417229208694117 (tracked)  test_acc:0.8797
-step:500  train_loss:0.9979665354074723 (tracked)  test_acc:0.8807
-step:600  train_loss:0.9151358522120402 (tracked)  test_acc:0.8831
-step:700  train_loss:0.8710594189458134 (tracked)  test_acc:0.8849
-step:800  train_loss:0.8412712660027076 (tracked)  test_acc:0.8837
-step:900  train_loss:0.8236128599447577 (tracked)  test_acc:0.8814
-step:1000  train_loss:0.8132467373551305 (tracked)  test_acc:0.8824
+<pre>step:0  train_loss:1.3885555539232082  test_acc:0.9097
 </pre>
 </div>
 </div>
@@ -13549,13 +13441,41 @@ step:1000  train_loss:0.8132467373551305 (tracked)  test_acc:0.8824
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-julia"><pre><span></span>
+<div class=" highlight hl-julia"><pre><span></span><span class="n">my_opt</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.0001</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>step:0  train_loss:0.0982832379538861  test_acc:0.9778
+step:1  train_loss:0.058798922099351454  test_acc:0.9823
+step:2  train_loss:0.04470948472953977  test_acc:0.9859
+step:3  train_loss:0.03683575338240497  test_acc:0.9871000000000001
+step:4  train_loss:0.030979322538068232  test_acc:0.9881
+step:5  train_loss:0.026548839185737916  test_acc:0.9887
+step:6  train_loss:0.023549122782400043  test_acc:0.9896
+step:7  train_loss:0.021146819852282873  test_acc:0.9904
+step:8  train_loss:0.01909730216469945  test_acc:0.9904999999999999
+step:9  train_loss:0.016190657155984105  test_acc:0.9912000000000001
+step:10  train_loss:0.015597942537344192  test_acc:0.9912
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
